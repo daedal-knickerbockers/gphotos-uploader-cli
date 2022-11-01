@@ -10,7 +10,7 @@ import (
 type TrackedFile struct {
 	ModTime time.Time
 	Hash    string
-	Id		string
+	ID      string
 }
 
 // NewTrackedFile returns a TrackedFile with the specified values
@@ -33,7 +33,7 @@ func NewTrackedFile(value string) TrackedFile {
 	return TrackedFile{
 		Hash:    hash,
 		ModTime: modTime,
-		Id: parts[2],
+		ID:      parts[2],
 	}
 }
 

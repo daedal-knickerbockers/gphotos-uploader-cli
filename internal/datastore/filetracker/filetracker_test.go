@@ -52,7 +52,7 @@ func TestFileTracker_Exist(t *testing.T) {
 	}
 
 	ft := filetracker.New(&mockedRepository{
-		valueInRepo: filetracker.NewTrackedFile("test-file-hash", ""),
+		valueInRepo: filetracker.NewTrackedFile("test-file-hash||foo"),
 	})
 	ft.Hasher = &mockedHasher{"test-file-hash"}
 

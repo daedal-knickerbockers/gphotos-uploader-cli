@@ -60,10 +60,20 @@ func (ft FileTracker) Put(file string, id string) error {
 	item := TrackedFile{
 		ModTime: fileInfo.ModTime(),
 		Hash:    hash,
-		Id:		 id,
+		ID:      id,
 	}
 
 	return ft.repo.Put(file, item)
+}
+
+func (ft FileTracker) Get(file string) (TrackedFile, error) {
+	// Get returns ErrItemNotFound if the repo does not contains the key.
+	item, err := ft.repo.Get(file)
+	if err != nil {
+		return TrackedFile{}, err
+	}
+
+	return item, nil
 }
 
 // Exist checks if the file was already uploaded.

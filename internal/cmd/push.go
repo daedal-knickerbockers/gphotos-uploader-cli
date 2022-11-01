@@ -105,6 +105,12 @@ func (cmd *PushCmd) Run(cobraCmd *cobra.Command, args []string) error {
 			itemsByAlbum[i.AlbumName] = append(itemsByAlbum[i.AlbumName], i.Path)
 		}
 
+		if _, err := photosService.Albums.List(ctx); err != nil {
+			cli.Logger.Error("Could not prefetch already created albums!")
+			cli.Logger.Error(err)
+			return nil
+		}
+
 		for albumName, files := range itemsByAlbum {
 			albumId, err := getOrCreateAlbum(ctx, photosService.Albums, albumName, cli.FileTracker)
 			if err != nil {
@@ -170,7 +176,7 @@ func newPhotosService(client *http.Client, sessionTracker app.UploadSessionTrack
 }
 
 // getOrCreateAlbum returns the created (or existent) album in PhotosService.
-func getOrCreateAlbum(ctx context.Context, service task.AlbumsService, title string, ft FileTracker) (string, error) {
+func getOrCreateAlbum(ctx context.Context, service task.AlbumsService, title string, ft app.FileTracker) (string, error) {
 	// Returns if empty to avoid a PhotosService call.
 	if title == "" {
 		return "", nil
@@ -189,8 +195,7 @@ func getOrCreateAlbum(ctx context.Context, service task.AlbumsService, title str
 		return "", err
 	}
 
-	err := ft.Put(title, album.ID)
-	if err != nil {
+	if err := ft.Put(title, album.ID); err != nil {
 		return "", err
 	}
 

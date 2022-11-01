@@ -19,7 +19,7 @@ func TestTrackedFile_Hash(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			f := filetracker.NewTrackedFile(tc.input, "")
+			f := filetracker.NewTrackedFile(tc.input)
 			got := f.Hash
 			if tc.want != got {
 				t.Errorf("want: %s, got: %s", tc.want, got)
@@ -40,7 +40,7 @@ func TestTrackedFile_ModTime(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			f := filetracker.NewTrackedFile(tc.input, "")
+			f := filetracker.NewTrackedFile(tc.input)
 			got := f.ModTime
 			if tc.want != got {
 				t.Errorf("want: %s, got: %s", tc.want, got)
@@ -61,7 +61,7 @@ func TestTrackedFile_String(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			f := filetracker.NewTrackedFile(tc.input, "")
+			f := filetracker.NewTrackedFile(tc.input)
 			got := f.String()
 			if tc.want != got {
 				t.Errorf("want: %s, got: %s", tc.want, got)

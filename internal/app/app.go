@@ -202,7 +202,8 @@ func (app App) emptyDir(path string) error {
 
 // FileTracker represents a service to track file already uploaded.
 type FileTracker interface {
-	Put(file string) error
+	Put(file string, id string) error
+	Get(file string) (filetracker.TrackedFile, error)
 	Exist(file string) bool
 	Delete(file string) error
 	Close() error

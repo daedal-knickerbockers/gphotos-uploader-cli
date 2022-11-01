@@ -11,6 +11,7 @@ import (
 )
 
 type AlbumsService interface {
+	List(ctx context.Context) ([]albums.Album, error)
 	Create(ctx context.Context, title string) (*albums.Album, error)
 	GetByTitle(ctx context.Context, title string) (*albums.Album, error)
 }

@@ -11,7 +11,7 @@ type UploadFolderJob struct {
 
 // FileTracker represents a service to track already uploaded files.
 type FileTracker interface {
-	Put(file string) error
+	Put(file string, id string) error
 	Exist(file string) bool
 	Delete(file string) error
 }
