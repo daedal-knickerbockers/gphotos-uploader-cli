@@ -106,7 +106,7 @@ func (cmd *PushCmd) Run(cobraCmd *cobra.Command, args []string) error {
 		}
 
 		for albumName, files := range itemsByAlbum {
-			albumId, err := getOrCreateAlbum(ctx, photosService.Albums, albumName)
+			albumId, err := getOrCreateAlbum(ctx, photosService.Albums, albumName, cli.FileTracker)
 			if err != nil {
 				cli.Logger.Failf("Unable to create album '%s': %s", albumName, err)
 				continue
@@ -170,10 +170,14 @@ func newPhotosService(client *http.Client, sessionTracker app.UploadSessionTrack
 }
 
 // getOrCreateAlbum returns the created (or existent) album in PhotosService.
-func getOrCreateAlbum(ctx context.Context, service task.AlbumsService, title string) (string, error) {
+func getOrCreateAlbum(ctx context.Context, service task.AlbumsService, title string, ft FileTracker) (string, error) {
 	// Returns if empty to avoid a PhotosService call.
 	if title == "" {
 		return "", nil
+	}
+
+	if trackedFile, err := ft.Get(title); err == nil {
+		return trackedFile.ID, nil
 	}
 
 	if album, err := service.GetByTitle(ctx, title); err == nil {
@@ -181,6 +185,11 @@ func getOrCreateAlbum(ctx context.Context, service task.AlbumsService, title str
 	}
 
 	album, err := service.Create(ctx, title)
+	if err != nil {
+		return "", err
+	}
+
+	err := ft.Put(title, album.ID)
 	if err != nil {
 		return "", err
 	}

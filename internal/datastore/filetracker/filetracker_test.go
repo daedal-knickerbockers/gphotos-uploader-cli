@@ -34,7 +34,7 @@ func TestFileTracker_Put(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := ft.Put(tc.input)
+			err := ft.Put(tc.input, "")
 			assertExpectedError(t, tc.isErrExpected, err)
 		})
 	}
@@ -52,7 +52,7 @@ func TestFileTracker_Exist(t *testing.T) {
 	}
 
 	ft := filetracker.New(&mockedRepository{
-		valueInRepo: filetracker.NewTrackedFile("test-file-hash"),
+		valueInRepo: filetracker.NewTrackedFile("test-file-hash", ""),
 	})
 	ft.Hasher = &mockedHasher{"test-file-hash"}
 

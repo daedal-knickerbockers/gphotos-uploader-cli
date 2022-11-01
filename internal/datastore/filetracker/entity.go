@@ -10,11 +10,12 @@ import (
 type TrackedFile struct {
 	ModTime time.Time
 	Hash    string
+	Id		string
 }
 
 // NewTrackedFile returns a TrackedFile with the specified values
 func NewTrackedFile(value string) TrackedFile {
-	parts := strings.SplitN(value, "|", 2)
+	parts := strings.SplitN(value, "|", 3)
 
 	modTime := time.Time{}
 	hash := ""
@@ -32,6 +33,7 @@ func NewTrackedFile(value string) TrackedFile {
 	return TrackedFile{
 		Hash:    hash,
 		ModTime: modTime,
+		Id: parts[2],
 	}
 }
 

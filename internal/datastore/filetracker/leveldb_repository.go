@@ -33,7 +33,7 @@ func (r LevelDBRepository) Get(key string) (TrackedFile, error) {
 	if err != nil {
 		return TrackedFile{}, ErrItemNotFound
 	}
-	return NewTrackedFile(string(val)), nil
+	return NewTrackedFile(string(val), ""), nil
 }
 
 // Put stores the item under key.
