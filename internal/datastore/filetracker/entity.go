@@ -19,8 +19,9 @@ func NewTrackedFile(value string) TrackedFile {
 
 	modTime := time.Time{}
 	hash := ""
+	id := ""
 
-	if len(parts) == 2 {
+	if len(parts) >= 2 {
 		unixTime, err := strconv.ParseInt(parts[0], 10, 64)
 		if err == nil {
 			modTime = time.Unix(0, unixTime)
@@ -30,10 +31,14 @@ func NewTrackedFile(value string) TrackedFile {
 		hash = parts[0]
 	}
 
+	if len(parts) == 3 {
+		id = parts[2]
+	}
+
 	return TrackedFile{
 		Hash:    hash,
 		ModTime: modTime,
-		ID:      parts[2],
+		ID:      id,
 	}
 }
 
