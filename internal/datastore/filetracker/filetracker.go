@@ -3,6 +3,7 @@ package filetracker
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/gphotosuploader/gphotos-uploader-cli/internal/log"
 )
@@ -48,9 +49,13 @@ func New(r Repository) *FileTracker {
 
 // Put marks a file as already uploaded to prevent re-uploads.
 func (ft FileTracker) Put(file string, id string) error {
-	fileInfo, err := os.Stat(file)
-	if err != nil {
-		return err
+	modTime := time.Now()
+	if id == "" {
+		fileInfo, err := os.Stat(file)
+		if err != nil {
+			return err
+		}
+		modTime = fileInfo.ModTime()
 	}
 
 	hash, err := ft.Hasher.Hash(file)
@@ -58,7 +63,7 @@ func (ft FileTracker) Put(file string, id string) error {
 		return err
 	}
 	item := TrackedFile{
-		ModTime: fileInfo.ModTime(),
+		ModTime: modTime,
 		Hash:    hash,
 		ID:      id,
 	}
