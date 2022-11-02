@@ -50,18 +50,23 @@ func New(r Repository) *FileTracker {
 // Put marks a file as already uploaded to prevent re-uploads.
 func (ft FileTracker) Put(file string, id string) error {
 	modTime := time.Now()
+	hash := file
+
 	if id == "" {
 		fileInfo, err := os.Stat(file)
 		if err != nil {
 			return err
 		}
+
 		modTime = fileInfo.ModTime()
+		fileHash, err := ft.Hasher.Hash(file)
+		if err != nil {
+			return err
+		}
+
+		hash = fileHash
 	}
 
-	hash, err := ft.Hasher.Hash(file)
-	if err != nil {
-		return err
-	}
 	item := TrackedFile{
 		ModTime: modTime,
 		Hash:    hash,
